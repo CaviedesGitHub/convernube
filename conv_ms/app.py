@@ -20,10 +20,10 @@ celery_app=make_celery(flask_app)
 celery_app.conf.beat_schedule = {
     'add-every-30-seconds': {
         'task': 'conv_ms.app.convertir_archivos',
-        'schedule': crontab(minute='*/1'),
+        'schedule': 1.0,
         'args': ('prueba', datetime.utcnow())
     },
-}
+}  #minute='*/1'  crontab(sec='*/1')
 celery_app.conf.timezone = 'UTC'
 
 @celery_app.task(name='conv_ms.app.convertir_archivos', bind=True, ignore_result=False)
@@ -40,12 +40,18 @@ def convertir_archivos(self, nom_arch, fecha):
         db.session.rollback()
         return 'Error al bloquear Tarea', 409
     #usuario=Usuario.query.with_for_update().get(id_usuario)
-    print(os.curdir)
-    print(os.getcwd())
-    shutil.copy(os.getcwd()+'/archivos/input/'+tarea.nom_arch, os.getcwd()+'/archivos/output/'+tarea.nom_arch)
-    print(tarea.nom_arch)
-    with open('archivos_login','a+') as file:
-        file.write('Convertir Archivos: Fecha: {} - Archivo: {}\n'.format(fecha, nom_arch))
-    print(fecha)   
+    nombre=tarea.nom_arch
+    nombre=nombre.replace('.', '-'+str(tarea.id)+'.')
+    shutil.copy(os.getcwd()+'/archivos/input/'+nombre, os.getcwd()+'/archivos/output/'+nombre)
+    tarea=Tarea.query.with_for_update().get(tarea.id)
+    if tarea is None:
+        #db.session.rollback()   #?  Borrar el archivo!!
+        return
+    try:
+        tarea.is_lock=False
+        tarea.estado=EstadoTarea.PROCESSED
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return 'Error procesando Conversión', 409
     
-

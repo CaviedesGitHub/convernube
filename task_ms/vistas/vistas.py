@@ -44,20 +44,24 @@ def authorization_required():
 class VistaTareas(Resource):
     @authorization_required()
     def post(self, id_usuario):
-        if request.form.get('tipo') not in ALLOWED_EXTENSIONS:
-           return {"msg":"Extensión Objetivo NO Valido."}
+        #if request.form.get('tipo') not in ALLOWED_EXTENSIONS:
+        #   return {"msg":"Extensión Objetivo NO Valido."}
         if 'archivo' in request.files:
            file = request.files['archivo']
            if file.filename != '':
-              if file and allowed_file(file.filename):
-                 filename = secure_filename(file.filename)
-                 nombre1=nombre_temp(filename, id_usuario)
-                 file.save(nombre1)
-                 nueva_tarea = Tarea(id_usr=id_usuario, nom_arch=filename, ext_conv=ExtSound[request.form.get('tipo')])  
+              if file: #and allowed_file(file.filename):
+                 filename = secure_filename(file.filename)              
+                 nueva_tarea = Tarea(id_usr=id_usuario, nom_arch=filename, ext_conv=ExtSound[request.form.get('tipo')])                   
                  db.session.add(nueva_tarea)
                  db.session.commit()
-                 nombre2=nombre_def(filename, nueva_tarea.id)
-                 os.rename(nombre1, nombre2)
+                 nombre2=nombre_def(filename, nueva_tarea.id)                    
+                 try:
+                    file.save(nombre2)
+                 except Exception as inst:
+                    #print(inst.args)
+                    db.session.delete(nueva_tarea)
+                    db.session.commit()
+                    return {"msg":"Error subiendo archivo. Tarea NO Creada."}            
                  return tarea_schema.dump(nueva_tarea)
         return {"msg":"Archivo NO Valido."}
      
