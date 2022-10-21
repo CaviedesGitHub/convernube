@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required, create_access_token
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from flask_login import (current_user, login_user, logout_user, login_required)
-from ..modelos import db, Usuario, UsuarioSchema
+from auth_ms.modelos import db, Usuario, UsuarioSchema
+#import auth_ms.modelos.modelos
 
 usuario_schema = UsuarioSchema()
 
