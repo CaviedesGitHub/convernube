@@ -3,6 +3,7 @@ INSTALACION
 
 1. Descargue el código del repositorio a su equipo.
    Git clone 
+   Debería funcionar cualquiera de las ramas: Maine o unarchivo.
 2. Abra la carpeta convernube en vs code
 3. Instale un entorno virtual en la carpeta venv.
    En la terminal digite lo siguiente.
