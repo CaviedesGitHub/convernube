@@ -2,8 +2,8 @@
 INSTALACION
 
 1. Descargue el código del repositorio a su equipo.
-   Git clone 
-   Debería funcionar cualquiera de las ramas: Maine o unarchivo.
+   Git clone https://github.com/CaviedesGitHub/convernube.git
+   Debería funcionar cualquiera de las ramas: Main o unarchivo.
 2. Abra la carpeta convernube en vs code
 3. Instale un entorno virtual en la carpeta venv.
    En la terminal digite lo siguiente.
@@ -19,13 +19,13 @@ INSTALACION
 5. Instale las dependencias.
    Pip freeze > requirements.txt
 6. Debe tener instalado postgres y una base de 
-   Datos llamada AudioConv con usuario administrador 
+   Datos llamada AudioConv con usuario admin 
    Y contraseña admin.
    En linux:
       Sudo apt update
       Sudo apt install postgresql postgresql.contrib
       Sudo su - postgres 
-      Create user admin with password 'postgres'
+      Create user admin with password 'admin'
       Create database AudioConv with owner admin
       Alter user postgres with super user
       \q
