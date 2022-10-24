@@ -57,12 +57,12 @@ INSTALACION
    Abra una nueva terminal. Asegúrese que el virtual env 
    Este activo.
    En esa terminal ejecutar:
-      Celery -A conv_ms.celery_app beat
+      Celery -A conv_ms.app.celery_app beat
 13. Ejecute el trabajador celery.
    Abra una nueva terminal. Asegúrese que el virtual env 
    Este activo.
    En esa terminal ejecutar:
-      Celery -A conv_ms.celery_app l info --pool=solo
+      Celery -A conv_ms.app.celery_app worker -l info --pool=solo
 
 En este momento deberían estar desplegados los microservicios asi:
 Auth_ms 127.0.0.1:5001
