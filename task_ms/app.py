@@ -129,9 +129,11 @@ class VistaConversion(Resource):
     @jwt_required()
     def post(self):
         print("Inicio")
+
         #print(request.form.get('tipo'))
         #if request.form.get('tipo') not in ALLOWED_EXTENSIONS:
         #   return {"msg":"Extensión Objetivo NO Valido."}
+        
         if 'archivo' in request.files:
            print("Archivo")
            file = request.files['archivo']
