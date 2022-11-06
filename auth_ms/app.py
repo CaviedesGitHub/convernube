@@ -34,8 +34,8 @@ db = SQLAlchemy()
 from flask import Flask
 app=Flask(__name__)
 app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b23a5d1616bf319bc298105da20fe'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:admin@localhost:5432/AudioConv'  ##app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ConvAudio.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@35.222.204.216/postgres'   ##'postgresql://admin:admin@localhost:5432/AudioConv'  ##app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ConvAudio.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False   
 app.config['JWT_SECRET_KEY'] = 'cloud2022'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
 #app=create_app('default')
@@ -147,11 +147,16 @@ class VistaUsuario(Resource):
         db.session.commit()
         return "Usuario Borrado.",  204
 
+class VistaPing(Resource):
+    def get(self):
+        print("pong")
+        return {"Mensaje":"Pong"}
 
 api = Api(app)
 api.add_resource(VistaSignIn, '/api/auth/signup')
 api.add_resource(VistaLogIn, '/api/auth/login')
 api.add_resource(VistaUsuario, '/usuario/<int:id_usuario>')
+api.add_resource(VistaPing, '/ping')
             
 
 jwt = JWTManager(app)

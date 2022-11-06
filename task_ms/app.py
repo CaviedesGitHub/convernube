@@ -9,8 +9,8 @@ from flask_jwt_extended import JWTManager
 from flask import Flask
 flask_app=Flask(__name__)
 flask_app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b23a5d1616bf319bc298105da20fe'
-flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:admin@localhost:5432/AudioConv'  ##app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ConvAudio.db'
-flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@35.222.204.216:5432/postgres'  ##app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ConvAudio.db'
+flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
 flask_app.config['JWT_SECRET_KEY'] = 'cloud2022'
 flask_app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
 UPLOAD_FOLDER = 'C:/java'
@@ -153,7 +153,7 @@ class VistaConversion(Resource):
                  try:
                     file.save(nombre2)
                  except Exception as inst:
-                    #print(inst.args)
+                    print(inst.args)
                     db.session.delete(nueva_tarea)
                     db.session.commit()
                     return {"msg":"Error subiendo archivo. Tarea NO Creada."}            
@@ -248,16 +248,15 @@ def nombre_temp(nom, id):
 def nombre_input(nom, id):
    temp=nom
    temp=temp.replace('.', '-'+str(id)+'.')
-   #temp=os.path.join('../archivos/input', temp)
-   #temp='/home/luis/Desarrollo/repo/nube/convernube/archivos/'+'input/'+temp
-   temp='../archivos/'+'input/'+temp
+   #temp='../archivos/'+'input/'+temp
+   temp='/nfs/'+'entrada/'+temp
    return temp
 
 def nombre_output(nom, id, ext):
    temp=nom
    temp=temp.replace('.', '-'+str(id)+'.')
-   temp=os.path.splitext(temp)[0]+'.'+ext.lower()
-   temp='../archivos/'+'output/'+temp
+   #temp='../archivos/'+'output/'+temp
+   temp='/nfs/'+'salida/'+temp
    return temp
 
 
