@@ -9,6 +9,26 @@ import shutil
 #from flask_mail import Mail, Message 
 from pydub import AudioSegment
 
+
+from google.cloud.storage import Blob
+from google.cloud import storag
+
+#Se instancia la clase de Cloud Storage para poder comunicarnos directamente con la nube.
+#$ client = storage.Client(project='neural-theory-367121')
+#Seleccionamos el bucket necesario para realizar las operaciones que queramos como subir archivos.
+#$ bucket = client.get_bucket('bucketconversionaudio')
+
+#Se crea un Objeto de tipo Blob con un nombre que deseamos que vaya a tener dentro del bucket.
+#$ blob = Blob('NAME.png', bucket)
+
+#Ahora le decimos al blog que suba el archivo en dicha dirección a nuestro bucket pasando dos parametros la PATH del file y el contentex type.
+#$ blob.upload_from_filename('/PATH/TO/FILE.png','image/png')
+#Hacemos que el archivo sea publico si así lo deseamos
+#$ blob.make_public()
+
+#Se imprime la url del bucket para poder acceder al archivo a través de ella esta luego puede ser compartida o guardada en una BD.
+#$ print blob.public_url
+
 #flask_app=create_app('default')
 from flask import Flask
 flask_app=Flask(__name__)
@@ -34,6 +54,9 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from sqlalchemy.sql import func
 
 db = SQLAlchemy()
+
+client = storage.Client(project='neural-theory-367121')
+bucket = client.get_bucket('bucketconversionaudio')
 
 class Gender(enum.Enum):
     # as per ISO 5218
@@ -194,6 +217,7 @@ def convertir_archivos(self, nom_arch, fecha):
 def convArchivo(id, nombre, ext):
     nombre_in=nombre.replace('.', '-'+str(id)+'.')
     nombre_out=os.path.splitext(nombre_in)[0]+'.'+ext.lower()
+    blob = Blob('/salida/'+nombre_out, bucket)
     nombre_in=os.getcwd()+'/archivos/input/'+nombre_in
     nombre_out=os.getcwd()+'/archivos/output/'+nombre_out
     print(nombre_in)
@@ -213,5 +237,7 @@ def convArchivo(id, nombre, ext):
         print("Antes de exportar")
         print(ext.lower())
         song.export(nombre_out, format=ext.lower())
+        blob.upload_from_filename(nombre_out,'audio/'+ext.lower())     
+        blob.make_public() 
     except Exception as inst:
         shutil.copy(nombre_in, nombre_out)

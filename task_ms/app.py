@@ -32,6 +32,12 @@ from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
+$ from google.cloud.storage import Blob
+$ from google.cloud import storag
+
+client = storage.Client(project='neural-theory-365432')
+bucket = client.get_bucket('bucketconversionaudio')
+
 class ExtSound(enum.Enum):
     MP3 = 1
     ACC = 2
@@ -152,6 +158,12 @@ class VistaConversion(Resource):
                  print(nombre2)              
                  try:
                     file.save(nombre2)
+                    temp=filename
+                    temp=temp.replace('.', '-'+str(id)+'.')
+                    blob = Blob('/entrada/'+temp, bucket)
+                    cadext=os.path.splitext(temp)[1]
+                    blob.upload_from_filename(nombre2,'audio/'+cadext[-3:])
+                    blob.make_public()
                  except Exception as inst:
                     print(inst.args)
                     db.session.delete(nueva_tarea)
