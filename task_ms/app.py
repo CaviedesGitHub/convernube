@@ -32,10 +32,10 @@ from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
-$ from google.cloud.storage import Blob
-$ from google.cloud import storag
+from google.cloud.storage import Blob
+from google.cloud import storag
 
-client = storage.Client(project='neural-theory-365432')
+client = storage.Client(project='neural-theory-367121')
 bucket = client.get_bucket('bucketconversionaudio')
 
 class ExtSound(enum.Enum):
@@ -126,7 +126,7 @@ def authorization_required():
         return decorator
     return wrapper
 
-class VistaConversion(Resource):
+class VistaConversion(Resource):    
     @jwt_required()
     def delete(self):
         print("Inicio")
@@ -164,6 +164,8 @@ class VistaConversion(Resource):
                     cadext=os.path.splitext(temp)[1]
                     blob.upload_from_filename(nombre2,'audio/'+cadext[-3:])
                     blob.make_public()
+                    if os.path.exists(nombre2):
+                       os.remove(nombre2)
                  except Exception as inst:
                     print(inst.args)
                     db.session.delete(nueva_tarea)
@@ -200,6 +202,11 @@ class VistaTarea(Resource):
            db.session.rollback()
            return  {"Msg":"Usuario desautorizado."}
         if tarea.estado==EstadoTarea.PROCESSED:
+           temp=tarea.nom_arch 
+           temp=temp.replace('.', '-'+str(id_task)+'.') 
+           temp=os.path.splitext(temp)[0]+'.'+tarea.ext_conv.name.lower()
+           blob = Blob('/salida/'+temp, bucket) 
+           blob.delete
            nombre=nombre_output(tarea.nom_arch, tarea.id, tarea.ext_conv.name.lower())
            if os.path.exists(nombre):
               os.remove(nombre)
@@ -217,11 +224,18 @@ class VistaTarea(Resource):
         tarea=Tarea.query.get_or_404(id_task)
         if tarea.id_usr!=user_jwt:
            return  {"Msg":"Usuario desautorizado."}
+        temp=tarea.nom_arch
+        temp=temp.replace('.', '-'+str(id_task)+'.')
+        blob=Blob('/entrada/'+temp, bucket)
+        blob.delete
         nombre=nombre_input(tarea.nom_arch, tarea.id)
         if os.path.exists(nombre):
            os.remove(nombre)
         print("borrar el archivo Original")
         if tarea.estado==EstadoTarea.PROCESSED:
+           temp=os.path.splitext(temp)[0]+'.'+tarea.ext_conv.name.lower()
+           blob = Blob('/salida/'+temp, bucket)
+           blob.delete 
            nombre=nombre_output(tarea.nom_arch, tarea.id, tarea.ext_conv.name.lower())
            if os.path.exists(nombre):
               os.remove(nombre)
@@ -237,10 +251,18 @@ class VistaArchivo(Resource):
         tarea=Tarea.query.get_or_404(id_task)
         if tarea.id_usr!=user_jwt:
            return  {"Msg":"Usuario desautorizado."}
+        temp=tarea.nom_arch
         if request.get_json()['archivo']=="INPUT":
+           temp=temp.replace('.', '-'+str(id_task)+'.')
+           blob=Blob('/entrada/'+temp, bucket)
            nombre=nombre_input(tarea.nom_arch, tarea.id)
         else:
+           temp=temp.replace('.', '-'+str(id_task)+'.')
+           temp=os.path.splitext(temp)[0]+'.'+tarea.ext_conv.name.lower()
+           blob = Blob('/salida/'+temp, bucket)
            nombre=nombre_output(tarea.nom_arch, tarea.id, tarea.ext_conv.name.lower())
+    
+        blob.download_to_filename(nombre)
         return send_file(nombre, as_attachment=True)
     
 

@@ -216,9 +216,12 @@ def convertir_archivos(self, nom_arch, fecha):
     
 def convArchivo(id, nombre, ext):
     nombre_in=nombre.replace('.', '-'+str(id)+'.')
+    blobin=Blob('/entrada/'+nombre_in, bucket)
     nombre_out=os.path.splitext(nombre_in)[0]+'.'+ext.lower()
     blob = Blob('/salida/'+nombre_out, bucket)
     nombre_in=os.getcwd()+'/archivos/input/'+nombre_in
+    blobin.download_to_filename(nombre_in)
+    
     nombre_out=os.getcwd()+'/archivos/output/'+nombre_out
     print(nombre_in)
     print(nombre_out)
@@ -239,5 +242,9 @@ def convArchivo(id, nombre, ext):
         song.export(nombre_out, format=ext.lower())
         blob.upload_from_filename(nombre_out,'audio/'+ext.lower())     
         blob.make_public() 
+        if os.path.exists(nombre_in):
+              os.remove(nombre_in)
+        if os.path.exists(nombre_out):
+              os.remove(nombre_out)      
     except Exception as inst:
         shutil.copy(nombre_in, nombre_out)
