@@ -159,7 +159,7 @@ celery_app=make_celery(flask_app)
 celery_app.conf.beat_schedule = {
     'add-every-30-seconds': {
         'task': 'conv_ms.app.convertir_archivos',
-        'schedule': 270.0,
+        'schedule': 60.0,
         'args': ('prueba', datetime.utcnow())
     },
 }  #minute='*/1'  crontab(sec='*/1')
@@ -179,27 +179,29 @@ def convertir_archivos(self, nom_arch, fecha):
         except IntegrityError:
             db.session.rollback()
             continue
+
         error=convArchivo(tarea.id, tarea.nom_arch, tarea.ext_conv.name.lower())
+        print("Despues de Convertir")
         tarea=Tarea.query.with_for_update().get(tarea.id)
         if tarea is not None:
            if error==0:
-              try:
-                  tarea.is_lock=False
-                  tarea.estado=EstadoTarea.PROCESSED
-                  db.session.commit()
-              except IntegrityError:
-                  db.session.rollback()
-                  ####return 'Error procesando Conversión', 409
+               try:
+                   tarea.is_lock=False
+                   tarea.estado=EstadoTarea.PROCESSED
+                   db.session.commit()
+               except IntegrityError:
+                   db.session.rollback()
+                   ####return 'Error procesando Conversión', 409
            else:
-              try:
-                  tarea.is_lock=False
-                  tarea.estado=EstadoTarea.UPLOADED
-                  db.session.commit()
-              except IntegrityError:
-                  db.session.rollback()
-                  ####return 'Error procesando Conversión', 409
+               try:
+                   tarea.is_lock=False
+                   tarea.estado=EstadoTarea.UPLOADED
+                   db.session.commit()
+               except IntegrityError:
+                   db.session.rollback()
+                   ####return 'Error procesando Conversión', 409
 
-    
+
 def convArchivo(id, nombre, ext):
     nombre_in=nombre.replace('.', '-'+str(id)+'.')
     blobin=Blob('entrada/'+nombre_in, bucket)
@@ -228,17 +230,12 @@ def convArchivo(id, nombre, ext):
         song.export(nombre_out, format=ext.lower())
         blob.upload_from_filename(nombre_out, 'audio/'+ext.lower())
         print(nombre_out)
-        if os.path.exists(nombre_in):
-           os.remove(nombre_in)
-        if os.path.exists(nombre_out):
-           os.remove(nombre_out)
-        error=0
+error=0
     except Exception as inst:
-        error=1
-        if os.path.exists(nombre_out)==False:
-           shutil.copy(nombre_in, nombre_out)
-        if os.path.exists(nombre_in):
-           os.remove(nombre_in)
-        if os.path.exists(nombre_out):
-           os.remove(nombre_out)
-    return error
+        shutil.copy(nombre_in, nombre_out)
+
+    if os.path.exists(nombre_in):
+          os.remove(nombre_in)
+    if os.path.exists(nombre_out):
+          os.remove(nombre_out)
+

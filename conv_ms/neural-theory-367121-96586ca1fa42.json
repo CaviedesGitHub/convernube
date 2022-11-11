@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "neural-theory-367121",
+  "private_key_id": "96586ca1fa4295862024362e6ed5578822755886",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQDA7BBT3qC0Fz8V\nNo8OECUbJ2XXg+tLGAp6fqZuExo8iIA0rQkY/95wXIbhvA7AjdlFwPutA7BC1lms\nPhdqkSYLTyCcRKacGTZpdYuxTEiZ8QVh0CmthvQDTBfisgTHp2fh37YrT3rDhE1s\neUE0q+QjerckyCSh1KrXN/tu3noisVYE1GUccnYoJWiuBSRj2MsPZVWMVK4Cug7L\n5eFrOHnzoFf/v/P21ox/sAbejWk6odaCQAHM7fJaT6mJG/kdj96Pd+hBUH2bpPQM\nGun2JlcWM8/qY/ZpU7DW0laGSVtyNqHH9Qfq/ZLWqcAmgAbhqOQSPrGxlI75KXGw\nIQr4I3eFAgMBAAECggEACVhF8DIT+bU4jof+hPFeQsL1SWuv7YrEEyvoVuOg/Tal\ncyfAjY/zT+EDfZK06jnUwO64oihQFOS6IkA9tSFDxP93tmoS4fPMsW4KrrNhvucw\nWg0Rv8COOEyqyYXS+nLO8t95vP5UFX1mnK8A7BK5cciDb4osUBRzlAo3qSaopt53\noLMvGF891Ysqgyz9r7VeNxk2jZP/++p3NLRJ/dd2gbe/VxvZ+7BTFZ3zYUL3D+BD\n9AVxbYhwQFgadV10cehqWDEEDqb9yEgab51OaJATYoCIa/pto7PTJ5EXJMJIiucJ\nPS9kkz7oVdH6VtlL27nX2AL9VlxgquCe68Z6xINTYQKBgQDk6gkVyNjoqFd7Dqpx\npvt6IMJ7DqewMnrx4AH1eOoXiMkC93DioFV8/XOWo+ayZDNd4keNuNchNMPC8ZN9\njBxZa1LZVR8tWzSMmJaCNKuczB/KOqJUQAgc/FCetPmxCKvwUf7WoxKe2O8++xJE\n3bNuQCNtyRsdn/sjXTgOTm5ZsQKBgQDXv83d253kC8zLcVjvZ73peGt65+sKeywx\nRR8tno//24TKLW3n9wnt7QELnD3Fpfquod+9lg40ownCbR9CZ1OlWWukDr570SlX\nJNSu5KQPrwJTybxC3xtdY2C33r58EW7w0/r4QWMapBGql/Z4ggb+j989L77AuG/Y\nJoY8kqLcFQKBgQCWBgfUPiBiQkmq/Y6ZE63GeYfb7Fvb7wmCUaQXA5qvt9a9Wfui\nmx/L3bOOa3Z7PY4onm70o8piGdmefoKCCnxd4ieXBeF78UU8S5iAVxKNnX3MJKdU\nfe6TSI1xpfvqmVtOEf7pHlDKyDPr29I6Te4VeHV/swhRXxLRN3vQbHiH0QKBgGIs\nt4MjMn/ZFsHkvDGEpZid4Vq2OfA1CHELIRrjMmec/pn5fi+17GDGHlmoKTvNQXtB\n0cw1ghVVs1Uzzquq1RdCz4aB5w/0p7kt21ISXM1+N7Lk87QCTjN6y0IgK9HNJQyV\niXh6WJyA2EEmkVNY59HiqhTvqv+LbemP7jmWCGHZAn8FT3k0yVLfY2Uz92/Ff53J\n7YYMEtYR6VFN9RD+FmGnQBUjrbVFCBgA6BW/qTmli8nVpgVHeSzuIz/8WY5JoZNB\nh9MdopjB2QT3fcrzg8dp6GLWgRy1SKZYqxl/Eo79Fwxn7ORU+nN5/6ph3t9DO9CV\n9HCw7sEs+qJ9R6oD73er\n-----END PRIVATE KEY-----\n",
+  "client_email": "almacenamiento1@neural-theory-367121.iam.gserviceaccount.com",
+  "client_id": "108579645858999176935",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/almacenamiento1%40neural-theory-367121.iam.gserviceaccount.com"
+}
