@@ -33,9 +33,10 @@ from sqlalchemy.sql import func
 db = SQLAlchemy()
 
 from google.cloud.storage import Blob
-from google.cloud import storag
-
-client = storage.Client(project='neural-theory-367121')
+from google.cloud import storage
+                                                   
+client = storage.Client.from_service_account_json("neural-theory-367121-96586ca1fa42.json")
+#client = storage.Client(project='neural-theory-367121')
 bucket = client.get_bucket('bucketconversionaudio')
 
 class ExtSound(enum.Enum):
@@ -158,12 +159,13 @@ class VistaConversion(Resource):
                  print(nombre2)              
                  try:
                     file.save(nombre2)
-                    temp=filename
-                    temp=temp.replace('.', '-'+str(id)+'.')
-                    blob = Blob('/entrada/'+temp, bucket)
+                    temp=nueva_tarea.nom_arch
+                    temp=temp.replace('.', '-'+str(nueva_tarea.id)+'.')
+                    print(temp)
+                    blob = Blob('entrada/'+temp, bucket)
                     cadext=os.path.splitext(temp)[1]
                     blob.upload_from_filename(nombre2,'audio/'+cadext[-3:])
-                    blob.make_public()
+                    #blob.make_public()
                     if os.path.exists(nombre2):
                        os.remove(nombre2)
                  except Exception as inst:
@@ -205,8 +207,9 @@ class VistaTarea(Resource):
            temp=tarea.nom_arch 
            temp=temp.replace('.', '-'+str(id_task)+'.') 
            temp=os.path.splitext(temp)[0]+'.'+tarea.ext_conv.name.lower()
-           blob = Blob('/salida/'+temp, bucket) 
-           blob.delete
+           print(temp)
+           blob = Blob('salida/'+temp, bucket) 
+           blob.delete()
            nombre=nombre_output(tarea.nom_arch, tarea.id, tarea.ext_conv.name.lower())
            if os.path.exists(nombre):
               os.remove(nombre)
@@ -226,16 +229,16 @@ class VistaTarea(Resource):
            return  {"Msg":"Usuario desautorizado."}
         temp=tarea.nom_arch
         temp=temp.replace('.', '-'+str(id_task)+'.')
-        blob=Blob('/entrada/'+temp, bucket)
-        blob.delete
+        blob=Blob('entrada/'+temp, bucket)
+        blob.delete()
         nombre=nombre_input(tarea.nom_arch, tarea.id)
         if os.path.exists(nombre):
            os.remove(nombre)
         print("borrar el archivo Original")
         if tarea.estado==EstadoTarea.PROCESSED:
            temp=os.path.splitext(temp)[0]+'.'+tarea.ext_conv.name.lower()
-           blob = Blob('/salida/'+temp, bucket)
-           blob.delete 
+           blob = Blob('salida/'+temp, bucket)
+           blob.delete() 
            nombre=nombre_output(tarea.nom_arch, tarea.id, tarea.ext_conv.name.lower())
            if os.path.exists(nombre):
               os.remove(nombre)
@@ -254,12 +257,12 @@ class VistaArchivo(Resource):
         temp=tarea.nom_arch
         if request.get_json()['archivo']=="INPUT":
            temp=temp.replace('.', '-'+str(id_task)+'.')
-           blob=Blob('/entrada/'+temp, bucket)
+           blob=Blob('entrada/'+temp, bucket)
            nombre=nombre_input(tarea.nom_arch, tarea.id)
         else:
            temp=temp.replace('.', '-'+str(id_task)+'.')
            temp=os.path.splitext(temp)[0]+'.'+tarea.ext_conv.name.lower()
-           blob = Blob('/salida/'+temp, bucket)
+           blob = Blob('salida/'+temp, bucket)
            nombre=nombre_output(tarea.nom_arch, tarea.id, tarea.ext_conv.name.lower())
     
         blob.download_to_filename(nombre)

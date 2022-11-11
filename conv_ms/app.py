@@ -11,7 +11,7 @@ from pydub import AudioSegment
 
 
 from google.cloud.storage import Blob
-from google.cloud import storag
+from google.cloud import storage
 
 #Se instancia la clase de Cloud Storage para poder comunicarnos directamente con la nube.
 #$ client = storage.Client(project='neural-theory-367121')
@@ -216,9 +216,9 @@ def convertir_archivos(self, nom_arch, fecha):
     
 def convArchivo(id, nombre, ext):
     nombre_in=nombre.replace('.', '-'+str(id)+'.')
-    blobin=Blob('/entrada/'+nombre_in, bucket)
+    blobin=Blob('entrada/'+nombre_in, bucket)
     nombre_out=os.path.splitext(nombre_in)[0]+'.'+ext.lower()
-    blob = Blob('/salida/'+nombre_out, bucket)
+    blob = Blob('salida/'+nombre_out, bucket)
     nombre_in=os.getcwd()+'/archivos/input/'+nombre_in
     blobin.download_to_filename(nombre_in)
     
@@ -241,7 +241,7 @@ def convArchivo(id, nombre, ext):
         print(ext.lower())
         song.export(nombre_out, format=ext.lower())
         blob.upload_from_filename(nombre_out,'audio/'+ext.lower())     
-        blob.make_public() 
+        #blob.make_public() 
         if os.path.exists(nombre_in):
               os.remove(nombre_in)
         if os.path.exists(nombre_out):
