@@ -285,15 +285,15 @@ def nombre_temp(nom, id):
 def nombre_input(nom, id):
    temp=nom
    temp=temp.replace('.', '-'+str(id)+'.')
-   #temp='../archivos/'+'input/'+temp
-   temp='/nfs/'+'entrada/'+temp
+   temp='../archivos/'+'input/'+temp
+   #temp='/nfs/'+'entrada/'+temp
    return temp
 
 def nombre_output(nom, id, ext):
    temp=nom
    temp=temp.replace('.', '-'+str(id)+'.')
-   #temp='../archivos/'+'output/'+temp
-   temp='/nfs/'+'salida/'+temp
+   temp='../archivos/'+'output/'+temp
+   #temp='/nfs/'+'salida/'+temp
    return temp
 
 
